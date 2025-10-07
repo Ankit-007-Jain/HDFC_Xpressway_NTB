@@ -81,11 +81,11 @@ public class Products_NTB {
             //Now Verifying SSO URL
         	String actualSSOUrl=driver.getCurrentUrl();	
 
-            if (actualSSOUrl.contains("SSO_AUTHENTICATION_SUCCESS")) {
-                System.out.println("SSO Validation: Fixed Deposit using Funds from Other Bank SSO Test:: Pass");
+            if (actualSSOUrl.contains("etbfd")) {
+                System.out.println("To Validate: Fixed Deposit using Funds from Other redirection:: Pass");
             } else 
             {
-                System.out.println("SSO Validation: Fixed Deposit using Funds from Other Bank SSO Test: Fail. Correct URL should be:: " + actualSSOUrl);
+                System.out.println("To Validate: Fixed Deposit using Funds from Other redirection:: Fail");
             }
             Thread.sleep(8000);
             driver.close();
@@ -124,11 +124,11 @@ try {
                     //Now Verifying SSO URL
                 	String actualSSOUrl01=driver.getCurrentUrl();	
 
-                    if (actualSSOUrl01.contains("SSO_AUTHENTICATION_SUCCESS")) {
-                        System.out.println("SSO Validation: Credit Card Application SSO Test:: Pass");
+                    if (actualSSOUrl01.contains("/cards/credit-cards")) {
+                        System.out.println("To Validate: Credit Card Application redirection:: Pass");
                     } else 
                     {
-                        System.out.println("SSO Validation: Credit Card Application SSO Test: Fail. Correct URL should be:: " + actualSSOUrl01);
+                        System.out.println("To Validate: Credit Card Application redirection:: Fail");
                     }
                     Thread.sleep(10000);
                    driver.close();

@@ -23,25 +23,25 @@ public class DigitalPlatform_NTB {
 		System.out.println("<<<<<<<<<<<<<<<<<DigitalPlatforms_PAGE VALIDATION>>>>>>>>>>>>>>>>>");
 		Thread.sleep(3000);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//Validating HDFC SKY navigation
+//Validating Smart Wealth navigation
 		try {
 			
 	WebElement smartWealthCTA=driver.findElement(By.xpath("//*[text()='SmartWealth']"));
 	Thread.sleep(2000);
 
-//To navigate to HDFCSky and clicking
+//To navigate to Smartwealth and clicking
 	((JavascriptExecutor) driver).executeScript("arguments[0].click();", smartWealthCTA);
 	Thread.sleep(8000);
 //	hdfcSkyCTA.click();
 	
 	ArrayList<String> tab= new ArrayList<String>(driver.getWindowHandles());
 	driver.switchTo().window(tab.get(1));
-	Thread.sleep(5000);
 	String currentUrl03=driver.getCurrentUrl();
-	if (currentUrl03.contains("LCCode=7738") && currentUrl03.contains("LGCode=AYUS12"))
-	{  System.out.println("To Validate: Smart Wealth URL Contains LG and LC code:: Pass");  }
-	else {
-	        System.out.println("To Validate: Smart Wealth URL Does Not Contain LG and LC code:: Fail");
+	if (currentUrl03.contains("LCCode=7738&LGCode=AYUS12"))
+	{						
+	        System.out.println("To Validate: Smart Wealth URL contains LG and LC code ::Pass");
+	    } else {
+	        System.out.println("To Validate: Smart Wealth URL does not contains LG and LC code ::Fail");
 	    }
 	driver.close();
 	driver.switchTo().window(tab.get(0));
