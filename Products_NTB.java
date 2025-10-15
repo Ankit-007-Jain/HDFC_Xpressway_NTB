@@ -26,7 +26,7 @@ public class Products_NTB {
        WebElement heading= driver.findElement(By.xpath("//*[@id='guideContainer-rootPanel-panel_1995127749_cop-panel_1128491847-panel_copy_copy_copy-guidetextdraw_601767___guide-item']"));
    
         String headingText= heading.getText();
-        if(headingText.contains("Dear Customer"))
+        if(headingText.contains("Customer, "))
         {
         	System.out.println("User Validation:: New To Bank (NTB) user");
         }
@@ -139,7 +139,10 @@ catch(Exception e)
 {
 	System.out.println("To Validate:: Credit Card Application offer is not visible");
 }
-    //Scrolling on top of the page                
+    //Scrolling on top of the page   
+JavascriptExecutor js1 = (JavascriptExecutor) driver;
+js1.executeScript("window.scrollTo(0, 0);");
+Thread.sleep(3000);	
                    
             
  //////////////////////////////////////////////////////////////////////////////   
@@ -223,7 +226,7 @@ Thread.sleep(2000);
 //driver.switchTo().window(anotherTab.get(0)); //tabs.get(0):: what we fixed for the first window above
 //Scrolling on top of the page
 
-JavascriptExecutor js1 = (JavascriptExecutor) driver;
+JavascriptExecutor js11 = (JavascriptExecutor) driver;
 js.executeScript("window.scrollTo(0, 0);");
 Thread.sleep(2000);
  

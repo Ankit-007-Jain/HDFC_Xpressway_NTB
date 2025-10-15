@@ -52,9 +52,8 @@ public class LoginPage_NTB {
 //Scenario: Entering incorrect OTP
 		WebElement otp= driver.findElement(By.xpath("//input[@name='guideContainer-rootPanel-panel_1995127749_cop-panel-panel_1370118956-panel-panel_1152171751-panel_2079927398_cop-panel-guidetextbox___jqName']"));
 		otp.sendKeys("457890");
-		Thread.sleep(2000);
 		System.out.println("To Validate: Entering wrong OTP working:: Pass");
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 //Clicking on Submit
 		WebElement submit=driver.findElement(By.id("guideContainer-rootPanel-panel_1995127749_cop-panel-panel_1370118956-panel-panel_1152171751-panel_295710100-guidebutton_12616455___widget"));
 		submit.click();

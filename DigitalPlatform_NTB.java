@@ -1,5 +1,6 @@
 package xpressway_HDFC_Prod_NTB;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
 import javax.swing.text.TabableView;
@@ -9,6 +10,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class DigitalPlatform_NTB {
@@ -24,36 +26,43 @@ public class DigitalPlatform_NTB {
 		Thread.sleep(3000);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Validating Smart Wealth navigation
-		try {
+	try {
 			
-	WebElement smartWealthCTA=driver.findElement(By.xpath("//*[text()='SmartWealth']"));
-	Thread.sleep(2000);
+	WebElement hdfcSkyCTA=driver.findElement(By.xpath("//div[@class='digitalservice_heading' and normalize-space()='HDFC Sky']"));
+	Actions actions = new Actions(driver);
+	actions.moveToElement(hdfcSkyCTA).perform();
+	Thread.sleep(4000);
 
 //To navigate to Smartwealth and clicking
-	((JavascriptExecutor) driver).executeScript("arguments[0].click();", smartWealthCTA);
-	Thread.sleep(8000);
-//	hdfcSkyCTA.click();
+	hdfcSkyCTA.click();
+	//((JavascriptExecutor) driver).executeScript("arguments[0].click();", hdfcSkyCTA);
+	Thread.sleep(10000);
 	
 	ArrayList<String> tab= new ArrayList<String>(driver.getWindowHandles());
 	driver.switchTo().window(tab.get(1));
+	Thread.sleep(7000);
 	String currentUrl03=driver.getCurrentUrl();
 	if (currentUrl03.contains("LCCode=7738&LGCode=AYUS12"))
 	{						
-	        System.out.println("To Validate: Smart Wealth URL contains LG and LC code ::Pass");
+	        System.out.println("To Validate: HDFC SKY URL contains LG and LC code ::Pass");
 	    } else {
-	        System.out.println("To Validate: Smart Wealth URL does not contains LG and LC code ::Fail");
+	        System.out.println("To Validate: HDFC SKY URL does not contains LG and LC code ::Fail");
 	    }
 	driver.close();
 	driver.switchTo().window(tab.get(0));
 		}
 		catch(Exception e)
 		{
-			System.out.println("To Validate:: Smart Wealth service is not visible:: Fail");
+			System.out.println("To Validate:: HDFC SKY service is not visible:: Fail");
 		}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//CLICKING OFFERS
 	
-	Thread.sleep(3000);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//CLICKING OFFERS
+	Thread.sleep(2000);
+//	
+	JavascriptExecutor js1 = (JavascriptExecutor) driver;
+	js1.executeScript("window.scrollTo(0, 0);");
+	Thread.sleep(3000);	
 	System.out.println("<<<<<<<<<<<<<<<<<Offers_PAGE VALIDATION>>>>>>>>>>>>>>>>>");
 WebElement offers=driver.findElement(By.xpath("//span[text()='Offers']"));
 if(offers.isDisplayed())

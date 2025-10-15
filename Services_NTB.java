@@ -79,95 +79,106 @@ public class Services_NTB {
 		
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Selecting Loans from Filter and clicking on "Update Mobile Number"
-		try {
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			WebElement filter = driver.findElement(By.cssSelector("select[aria-label='Service Grouping Filter']"));
-WebElement filter1= driver.findElement(By.id("guideContainer-rootPanel-panel_1995127749_cop-panel_1128491847-panel_1476744642-panel_1876474291-panel_897830868_copy-panel_50963200-guidedropdownlist___widget")
-);
-filter1.click();
-Thread.sleep(4000);
-			//If you want to select any value from dropdown so first locate the filter down arrow and
-			// then use select method to select the value from the dropdown
-Select select1 = new Select(filter);
-select1.selectByVisibleText("Loans");
-Thread.sleep(4000);
-WebElement selectLoans= driver.findElement(By.xpath("//option[@value='Loans']"));
-selectLoans.click();
-Thread.sleep(4000);
-			//Select select = new Select(filter);
-			//select.selectByVisibleText("Loans");
-			System.out.println("Loans filter selected successfully ::Pass");
-			Thread.sleep(5000);
-					
-			//Clicking Update Mobile Number
-			JavascriptExecutor js1 = (JavascriptExecutor) driver;
-			js1.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-			Thread.sleep(4000);
-		WebElement updateMobileNumber= driver.findElement(By.xpath("//*[contains(text(),'Update Mobile Number')]"));
-		Actions actionss= new Actions(driver);
-		actionss.moveToElement(updateMobileNumber).build().perform();
-		Thread.sleep(4000);
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", updateMobileNumber);
-		Thread.sleep(4000);
-
-	/*	WebElement updateNowCTA = driver.findElement(By.xpath("//a[@class='xpressway_imagewithtext_rightSection-cta' and contains(@href,'journey=106') and .//p[normalize-space(text())='Update Now']]"));
-		updateNowCTA.click();
-			Thread.sleep(3000);
-			WebElement updateNowCTA1 = driver.findElement(By.cssSelector("a.xpressway_imagewithtext_rightSection-cta[href*='journey=106']"));
-			updateNowCTA1.click();
-			*/
-	
-	/*	// Wait until the Update Now CTA is visible
-		WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(20));
-		JavascriptExecutor js11 = (JavascriptExecutor) driver;
-
-		// Wait for CTA to be present and visible
-		WebElement updateNowCTA = wait1.until(ExpectedConditions.visibilityOfElementLocated(
-		    By.xpath("//a[@class='xpressway_imagewithtext_rightSection-cta' and contains(@href,'journey=106') and .//p[normalize-space(text())='Update Now']]")));
-		System.out.println("Update Now CTA located successfully.");
-
-		// Scroll to the element to make sure it’s in viewport
-		js11.executeScript("arguments[0].scrollIntoView({block: 'center'});", updateNowCTA);
-		Thread.sleep(1500);
-
-		// Move mouse to the element (for hover/focus behavior)
-		Actions actions = new Actions(driver);
-		actions.moveToElement(updateNowCTA).perform();
-		Thread.sleep(1000);
-
-		// Use JS click to handle overlays or dynamic layers
-		js11.executeScript("arguments[0].click();", updateNowCTA);
-		System.out.println("Clicked on Update Now CTA successfully.");
-
-		// Wait for new tab to open
-		Thread.sleep(5000);
 		
-		ArrayList<String> tabs04= new ArrayList<String>(driver.getWindowHandles());
-	    driver.switchTo().window(tabs04.get(1));
-	    Thread.sleep(10000); 
+		try {
+		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-	////Validate: LGCODE AND LCCODE IN THE URL
-	String actualURL=driver.getCurrentUrl();
-	//
-	if(actualURL.contains("LCCode=7738&LGCode=AYUS12"))
-	{
-		System.out.println("To Validate: User selects Loans Filter and clicked on Update Mobile Number whereas, URL contains LG Code and LC Code :: Pass");
-	}
-	else
-	{
-		System.out.println("To Validate: User selects Loans Filter and clicked on Update Mobile Number whereas, URL contains LG Code and LC Code:: Fail");
-	}
-	Thread.sleep(3000);
-	driver.close();
-	//tabs04= new ArrayList<String>(driver.getWindowHandles());
-	driver.switchTo().window(tabs04.get(0));
-	Thread.sleep(5000);}
-	*/
+		    // Wait for filter element to be present and clickable
+		    WebElement filter = wait.until(ExpectedConditions.elementToBeClickable(
+		        By.cssSelector("select[aria-label='Service Grouping Filter']")));
+
+		    // Click the dropdown to ensure it opens (some implementations require click)
+		    try {
+		        filter.click();
+		    } catch (Exception ignored) { /* ignore click if not needed */ }
+		    Thread.sleep(500); // small pause for dropdown animate
+
+		    // Use Select to pick Loans
+		    Select select = new Select(filter);
+		    select.selectByVisibleText("Loans");
+
+		    // Wait short time for the services/cards to be refreshed after selecting filter
+		    // (adjust locator to a container that is updated when filter changes)
+		    Thread.sleep(1500);
+
+		    // Scroll to bottom where services are expected to appear (or scroll to specific element)
+		    ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+		    Thread.sleep(1200);
+
+		    // Find the "Update Mobile Number" service card (stable relative xpath)
+		    // This finds an element that contains the service title text.
+		    WebElement updateMobileCard = wait.until(ExpectedConditions.visibilityOfElementLocated(
+		        By.xpath("//*[contains(normalize-space(.),'Update Mobile Number')]")));
+
+		    // Move to the card and center it in viewport
+		    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", updateMobileCard);
+		    Actions actions = new Actions(driver);
+		    actions.moveToElement(updateMobileCard).perform();
+		    Thread.sleep(800);
+
+		    // Now locate the Update Now CTA inside the same card/container.
+		    // Use a relative xpath to find the first anchor/button associated with that card.
+		    WebElement updateNowCTA = null;
+
+		    // Try a few robust relative-xpath patterns (some pages use different structures).
+		    List<By> ctaLocators = new ArrayList<>();
+		    ctaLocators.add(By.xpath("//*[contains(normalize-space(.),'Update Mobile Number')]/ancestor::div[1]//a[contains(.,'Update Now') or contains(@href,'journey=106')]"));
+		    ctaLocators.add(By.xpath("//a[contains(@href,'journey=106') and .//p[contains(normalize-space(.),'Update Now')]]"));
+		    ctaLocators.add(By.xpath("//*[contains(normalize-space(.),'Update Mobile Number')]/following::a[contains(.,'Update Now')][1]"));
+
+		    for (By loc : ctaLocators) {
+		        try {
+		            updateNowCTA = driver.findElement(loc);
+		            if (updateNowCTA != null && updateNowCTA.isDisplayed()) break;
+		        } catch (Exception ignored) {}
+		    }
+
+		    if (updateNowCTA == null) {
+		        // Fallback: try to find any CTA text 'Update Now' anywhere
+		        updateNowCTA = driver.findElement(By.xpath("//a[contains(normalize-space(.),'Update Now') or .//p[contains(normalize-space(.),'Update Now')]]"));
+		    }
+
+		    // Wait until clickable
+		    wait.until(ExpectedConditions.elementToBeClickable(updateNowCTA));
+
+		    // Try normal click, then JS click fallback (handles overlays)
+		    boolean clicked = false;
+		    try {
+		        updateNowCTA.click();
+		        clicked = true;
+		    } catch (Exception clickEx) {
+		        // JS fallback
+		        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateNowCTA);
+		        clicked = true;
+		    }
+
+		    if (!clicked) {
+		        throw new Exception("Unable to click Update Now CTA");
+		    }
+
+		    // Wait for new tab/window to open and switch
+		    // give some time for tab creation
+		    wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
+		    ArrayList<String> tabs04 = new ArrayList<>(driver.getWindowHandles());
+		    driver.switchTo().window(tabs04.get(1));
+		    Thread.sleep(8000);
+
+		    // Validate URL
+		    String actualURL = driver.getCurrentUrl();
+		    if (actualURL.contains("LCCode=7738&LGCode=AYUS12")) {
+		        System.out.println("To Validate: User selects Loans Filter and clicked on Update Mobile Number whereas, URL contains LG Code and LC Code :: Pass");
+		    } else {
+		        System.out.println("To Validate: User selects Loans Filter and clicked on Update Mobile Number whereas, URL does not contain LG Code and LC Code:: Fail");
+		    }
+
+		    Thread.sleep(3000);
+		    driver.close();
+		    driver.switchTo().window(tabs04.get(0));
+		    Thread.sleep(2000);
+		} catch (Exception e) {
+		    System.out.println("To validate: Update Mobile Number service flow failed or is not visible - " + e.getMessage());
 		}
-		catch (Exception e)
-		{
-			System.out.println("To validate: Update Mobile Number service is visible ::Pass");
-		}
+		
 			
 /////////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//	To scroll back to the top of the page
